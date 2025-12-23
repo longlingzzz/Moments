@@ -123,7 +123,6 @@
 
 <script>
 import { getMyPosts } from '../../services/api.js'
-
 export default {
   data() {
     return {
@@ -218,6 +217,7 @@ export default {
         this.statusBarHeight = 0
       }
     },
+<<<<<<< HEAD
     // 从后端获取我的动态列表
     async fetchMyPosts() {
       this.loading = true

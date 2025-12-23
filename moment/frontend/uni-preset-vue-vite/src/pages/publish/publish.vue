@@ -310,6 +310,7 @@ export default {
           content: this.content.trim(),
           images: this.images,
           video: this.video,
+<<<<<<< HEAD
           tags: this.selectedTags
         }
 
@@ -331,6 +332,7 @@ export default {
           return new Date(timestamp).toLocaleDateString()
         }
 
+<<<<<<< HEAD
         // 从响应中提取帖子数据
         const postData = response.data || response
         
@@ -354,6 +356,7 @@ export default {
 
         // 构建我的动态数据
         const myPost = {
+<<<<<<< HEAD
           id: postData.id,
           time: formatTime(Date.now()),
           text: postData.text,
@@ -370,6 +373,7 @@ export default {
           discoverPost: newPost,
           myPost: myPost
         })
+<<<<<<< HEAD
         // 通知我的页面刷新数据
         uni.$emit('refreshMyPosts')
 

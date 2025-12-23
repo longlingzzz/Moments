@@ -115,7 +115,6 @@ export async function getDiscoverPosts() {
     header: { ...authHeader() }
   });
 }
-
 export function saveToken(token) {
   uni.setStorageSync('auth_token', token);
 }

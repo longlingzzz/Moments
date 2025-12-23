@@ -155,7 +155,6 @@
 
 <script>
 import { getDiscoverPosts } from '../../services/api';
-
 export default {
   data() {
     return {
@@ -345,15 +344,13 @@ export default {
     // 获取发现动态列表
     this.fetchDiscoverPosts()
   },
-  onShow() {
-    // 页面显示时刷新数据
-    this.fetchDiscoverPosts()
-  },
   onReady() {
     this.calculateScrollHeight()
     this.setStatusBar()
   },
   onShow() {
+    // 页面显示时刷新数据
+    this.fetchDiscoverPosts()
     this.calculateScrollHeight()
     this.setStatusBar()
   },
