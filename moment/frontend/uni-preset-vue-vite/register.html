@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>注册 - 移动端设计原型</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 设计说明面板 */
+        .design-notes {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            max-width: 300px;
+            font-size: 12px;
+            line-height: 1.6;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .design-notes h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 14px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 5px;
+        }
+
+        .design-notes ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .design-notes li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .design-notes li:before {
+            content: "•";
+            color: #667eea;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .toggle-notes {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            color: #667eea;
+            z-index: 1001;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        /* 注册容器 */
+        .register-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            padding: 40px 30px;
+            width: 100%;
+            max-width: 400px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .register-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .register-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .register-container::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Logo区域 */
+        .logo-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-circle {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .logo-circle::before {
+            content: "✨";
+            font-size: 40px;
+        }
+
+        .logo-section h1 {
+            color: #333;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .logo-section p {
+            color: #999;
+            font-size: 14px;
+        }
+
+        /* 表单样式 */
+        .form-group {
+            margin-bottom: 18px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            color: #555;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 45px 14px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #bbb;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 18px;
+        }
+
+        .form-input:focus + .input-icon {
+            color: #667eea;
+        }
+
+        /* 密码显示/隐藏按钮 */
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 5px;
+            z-index: 10;
+        }
+
+        .toggle-password:hover {
+            color: #667eea;
+        }
+
+        /* 性别选择 */
+        .gender-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .gender-option {
+            flex: 1;
+            position: relative;
+        }
+
+        .gender-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .gender-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 15px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .gender-label::before {
+            content: "⚪";
+            margin-right: 8px;
+            font-size: 18px;
+        }
+
+        .gender-option input[type="radio"]:checked + .gender-label {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .gender-option input[type="radio"]:checked + .gender-label::before {
+            content: "🔘";
+        }
+
+        .gender-label:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        /* 年龄输入 */
+        .age-input {
+            width: 100%;
+            padding: 14px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .age-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        /* 用户协议 */
+        .agreement {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 25px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .agreement input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #667eea;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .agreement a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .agreement a:hover {
+            text-decoration: underline;
+        }
+
+        /* 注册按钮 */
+        .register-button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .register-button::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .register-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .register-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .register-button:active {
+            transform: translateY(0);
+        }
+
+        .register-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* 加载动画 */
+        .button-loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* 底部提示 */
+        .footer-text {
+            text-align: center;
+            margin-top: 20px;
+            color: #999;
+            font-size: 13px;
+        }
+
+        .footer-text a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 480px) {
+            .register-container {
+                padding: 30px 20px;
+                border-radius: 20px;
+                max-height: 95vh;
+            }
+
+            .logo-section h1 {
+                font-size: 24px;
+            }
+
+            .design-notes {
+                display: none;
+            }
+
+            .toggle-notes {
+                display: block;
+            }
+
+            .form-group {
+                margin-bottom: 16px;
+            }
+        }
+
+        /* 错误提示 */
+        .error-message {
+            color: #ff4757;
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+            animation: shake 0.3s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .form-group.error .form-input,
+        .form-group.error .age-input {
+            border-color: #ff4757;
+        }
+
+        .form-group.error .error-message {
+            display: block;
+        }
+
+        .agreement.error {
+            color: #ff4757;
+        }
+
+        /* 成功提示 */
+        .success-message {
+            background: #2ed573;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideDown 0.3s;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 密码强度指示器 */
+        .password-strength {
+            margin-top: 8px;
+            display: none;
+        }
+
+        .password-strength.show {
+            display: block;
+        }
+
+        .strength-bar {
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+
+        .strength-fill {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .strength-fill.weak {
+            width: 33%;
+            background: #ff4757;
+        }
+
+        .strength-fill.medium {
+            width: 66%;
+            background: #ffa502;
+        }
+
+        .strength-fill.strong {
+            width: 100%;
+            background: #2ed573;
+        }
+
+        .strength-text {
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <!-- 设计说明面板 -->
+    <button class="toggle-notes" onclick="toggleNotes()">设计说明</button>
+    <div class="design-notes" id="designNotes">
+        <h3>🎨 设计说明</h3>
+        <ul>
+            <li><strong>设计一致性：</strong>延续登录页面的渐变紫色主题，保持视觉统一性</li>
+            <li><strong>表单布局：</strong>采用垂直堆叠布局，字段间距18px，确保移动端操作舒适</li>
+            <li><strong>性别选择：</strong>卡片式单选按钮，选中状态有渐变背景和边框高亮，提升交互体验</li>
+            <li><strong>年龄输入：</strong>数字输入框，限制范围18-100岁，提供清晰的输入提示</li>
+            <li><strong>密码确认：</strong>实时验证两次密码是否一致，提供即时反馈</li>
+            <li><strong>密码强度：</strong>可视化强度指示器，帮助用户创建安全密码</li>
+            <li><strong>滚动优化：</strong>容器支持滚动，自定义滚动条样式，适配多字段表单</li>
+            <li><strong>表单验证：</strong>实时验证和提交验证双重保障，错误提示清晰明确</li>
+            <li><strong>用户协议：</strong>复选框+链接组合，符合注册流程规范</li>
+            <li><strong>交互反馈：</strong>所有输入框聚焦效果、按钮悬停动画、加载状态完整</li>
+            <li><strong>响应式适配：</strong>小屏幕下优化间距，确保所有元素可见可操作</li>
+        </ul>
+    </div>
+
+    <div class="register-container">
+        <!-- Logo区域 -->
+        <div class="logo-section">
+            <div class="logo-circle"></div>
+            <h1>创建账户</h1>
+            <p>填写信息完成注册</p>
+        </div>
+
+        <!-- 成功提示 -->
+        <div class="success-message" id="successMessage">注册成功！</div>
+
+        <!-- 注册表单 -->
+        <form id="registerForm">
+            <div class="form-group" id="usernameGroup">
+                <label for="username">账号</label>
+                <div class="input-wrapper">
+                    <input 
+                        type="text" 
+                        id="username" 
+                        class="form-input" 
+                        placeholder="请输入账号（3-20个字符）"
+                        autocomplete="username"
+                        required
+                    >
+                    <span class="input-icon">👤</span>
+                </div>
+                <div class="error-message">账号长度应为3-20个字符</div>
+            </div>
+
+            <div class="form-group" id="nicknameGroup">
+                <label for="nickname">昵称</label>
+                <div class="input-wrapper">
+                    <input 
+                        type="text" 
+                        id="nickname" 
+                        class="form-input" 
+                        placeholder="请输入昵称（2-20个字符）"
+                        autocomplete="nickname"
+                        required
+                    >
+                    <span class="input-icon">✏️</span>
+                </div>
+                <div class="error-message">昵称长度应为2-20个字符</div>
+            </div>
+
+            <div class="form-group" id="passwordGroup">
+                <label for="password">密码</label>
+                <div class="input-wrapper">
+                    <input 
+                        type="password" 
+                        id="password" 
+                        class="form-input" 
+                        placeholder="请输入密码（至少6位）"
+                        autocomplete="new-password"
+                        required
+                    >
+                    <button type="button" class="toggle-password" onclick="togglePassword('password')">👁️</button>
+                </div>
+                <div class="password-strength" id="passwordStrength">
+                    <div class="strength-bar">
+                        <div class="strength-fill" id="strengthFill"></div>
+                    </div>
+                    <div class="strength-text" id="strengthText">密码强度：弱</div>
+                </div>
+                <div class="error-message">密码长度至少6位，建议包含字母和数字</div>
+            </div>
+
+            <div class="form-group" id="confirmPasswordGroup">
+                <label for="confirmPassword">确认密码</label>
+                <div class="input-wrapper">
+                    <input 
+                        type="password" 
+                        id="confirmPassword" 
+                        class="form-input" 
+                        placeholder="请再次输入密码"
+                        autocomplete="new-password"
+                        required
+                    >
+                    <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword')">👁️</button>
+                </div>
+                <div class="error-message">两次输入的密码不一致</div>
+            </div>
+
+            <div class="form-group" id="genderGroup">
+                <label>性别</label>
+                <div class="gender-group">
+                    <div class="gender-option">
+                        <input type="radio" id="male" name="gender" value="male" required>
+                        <label for="male" class="gender-label">男</label>
+                    </div>
+                    <div class="gender-option">
+                        <input type="radio" id="female" name="gender" value="female">
+                        <label for="female" class="gender-label">女</label>
+                    </div>
+                    <div class="gender-option">
+                        <input type="radio" id="other" name="gender" value="other">
+                        <label for="other" class="gender-label">其他</label>
+                    </div>
+                </div>
+                <div class="error-message">请选择性别</div>
+            </div>
+
+            <div class="form-group" id="ageGroup">
+                <label for="age">年龄</label>
+                <input 
+                    type="number" 
+                    id="age" 
+                    class="age-input" 
+                    placeholder="请输入年龄"
+                    min="18"
+                    max="100"
+                    required
+                >
+                <div class="error-message">年龄应在18-100岁之间</div>
+            </div>
+
+            <div class="agreement" id="agreementGroup">
+                <input type="checkbox" id="agreement" required>
+                <label for="agreement">
+                    我已阅读并同意
+                    <a href="#" onclick="alert('用户协议内容'); return false;">《用户协议》</a>
+                    和
+                    <a href="#" onclick="alert('隐私政策内容'); return false;">《隐私政策》</a>
+                </label>
+            </div>
+            <div class="error-message" style="margin-top: -15px; margin-bottom: 10px; display: none;" id="agreementError">请同意用户协议和隐私政策</div>
+
+            <button type="submit" class="register-button" id="registerButton">
+                <span id="buttonText">立即注册</span>
+            </button>
+        </form>
+
+        <div class="footer-text">
+            已有账户？<a href="login.html">立即登录</a>
+        </div>
+    </div>
+
+    <script>
+        // 切换密码显示/隐藏
+        function togglePassword(fieldId) {
+            const passwordInput = document.getElementById(fieldId);
+            const toggleBtn = passwordInput.nextElementSibling;
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleBtn.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                toggleBtn.textContent = '👁️';
+            }
+        }
+
+        // 切换设计说明显示
+        function toggleNotes() {
+            const notes = document.getElementById('designNotes');
+            notes.style.display = notes.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // 密码强度检测
+        function checkPasswordStrength(password) {
+            const strengthDiv = document.getElementById('passwordStrength');
+            const strengthFill = document.getElementById('strengthFill');
+            const strengthText = document.getElementById('strengthText');
+
+            if (password.length === 0) {
+                strengthDiv.classList.remove('show');
+                return;
+            }
+
+            strengthDiv.classList.add('show');
+
+            let strength = 0;
+            let text = '弱';
+            
+            if (password.length >= 6) strength++;
+            if (password.length >= 10) strength++;
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+            if (/\d/.test(password)) strength++;
+            if (/[^a-zA-Z0-9]/.test(password)) strength++;
+
+            strengthFill.className = 'strength-fill';
+            
+            if (strength <= 2) {
+                strengthFill.classList.add('weak');
+                text = '弱';
+            } else if (strength <= 3) {
+                strengthFill.classList.add('medium');
+                text = '中';
+            } else {
+                strengthFill.classList.add('strong');
+                text = '强';
+            }
+
+            strengthText.textContent = `密码强度：${text}`;
+        }
+
+        // 监听密码输入
+        document.getElementById('password').addEventListener('input', function() {
+            checkPasswordStrength(this.value);
+            document.getElementById('passwordGroup').classList.remove('error');
+        });
+
+        // 监听确认密码输入
+        document.getElementById('confirmPassword').addEventListener('input', function() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = this.value;
+            const confirmGroup = document.getElementById('confirmPasswordGroup');
+            
+            if (confirmPassword.length > 0 && password !== confirmPassword) {
+                confirmGroup.classList.add('error');
+            } else {
+                confirmGroup.classList.remove('error');
+            }
+        });
+
+        // 表单验证
+        function validateForm() {
+            const username = document.getElementById('username').value.trim();
+            const nickname = document.getElementById('nickname').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const gender = document.querySelector('input[name="gender"]:checked');
+            const age = parseInt(document.getElementById('age').value);
+            const agreement = document.getElementById('agreement').checked;
+            
+            let isValid = true;
+
+            // 验证账号
+            const usernameGroup = document.getElementById('usernameGroup');
+            if (username.length < 3 || username.length > 20) {
+                usernameGroup.classList.add('error');
+                isValid = false;
+            } else {
+                usernameGroup.classList.remove('error');
+            }
+
+            // 验证昵称
+            const nicknameGroup = document.getElementById('nicknameGroup');
+            if (nickname.length < 2 || nickname.length > 20) {
+                nicknameGroup.classList.add('error');
+                isValid = false;
+            } else {
+                nicknameGroup.classList.remove('error');
+            }
+
+            // 验证密码
+            const passwordGroup = document.getElementById('passwordGroup');
+            if (password.length < 6) {
+                passwordGroup.classList.add('error');
+                isValid = false;
+            } else {
+                passwordGroup.classList.remove('error');
+            }
+
+            // 验证确认密码
+            const confirmPasswordGroup = document.getElementById('confirmPasswordGroup');
+            if (password !== confirmPassword || confirmPassword.length === 0) {
+                confirmPasswordGroup.classList.add('error');
+                isValid = false;
+            } else {
+                confirmPasswordGroup.classList.remove('error');
+            }
+
+            // 验证性别
+            const genderGroup = document.getElementById('genderGroup');
+            if (!gender) {
+                genderGroup.classList.add('error');
+                isValid = false;
+            } else {
+                genderGroup.classList.remove('error');
+            }
+
+            // 验证年龄
+            const ageGroup = document.getElementById('ageGroup');
+            if (isNaN(age) || age < 18 || age > 100) {
+                ageGroup.classList.add('error');
+                isValid = false;
+            } else {
+                ageGroup.classList.remove('error');
+            }
+
+            // 验证协议
+            const agreementGroup = document.getElementById('agreementGroup');
+            const agreementError = document.getElementById('agreementError');
+            if (!agreement) {
+                agreementGroup.classList.add('error');
+                agreementError.style.display = 'block';
+                isValid = false;
+            } else {
+                agreementGroup.classList.remove('error');
+                agreementError.style.display = 'none';
+            }
+
+            return isValid;
+        }
+
+        // 实时验证
+        document.getElementById('username').addEventListener('blur', function() {
+            const username = this.value.trim();
+            const usernameGroup = document.getElementById('usernameGroup');
+            if (username.length > 0 && (username.length < 3 || username.length > 20)) {
+                usernameGroup.classList.add('error');
+            } else {
+                usernameGroup.classList.remove('error');
+            }
+        });
+
+        document.getElementById('nickname').addEventListener('blur', function() {
+            const nickname = this.value.trim();
+            const nicknameGroup = document.getElementById('nicknameGroup');
+            if (nickname.length > 0 && (nickname.length < 2 || nickname.length > 20)) {
+                nicknameGroup.classList.add('error');
+            } else {
+                nicknameGroup.classList.remove('error');
+            }
+        });
+
+        document.getElementById('password').addEventListener('blur', function() {
+            const password = this.value;
+            const passwordGroup = document.getElementById('passwordGroup');
+            if (password.length > 0 && password.length < 6) {
+                passwordGroup.classList.add('error');
+            } else {
+                passwordGroup.classList.remove('error');
+            }
+        });
+
+        document.getElementById('age').addEventListener('blur', function() {
+            const age = parseInt(this.value);
+            const ageGroup = document.getElementById('ageGroup');
+            if (this.value.length > 0 && (isNaN(age) || age < 18 || age > 100)) {
+                ageGroup.classList.add('error');
+            } else {
+                ageGroup.classList.remove('error');
+            }
+        });
+
+        // 清除错误状态
+        document.getElementById('username').addEventListener('input', function() {
+            document.getElementById('usernameGroup').classList.remove('error');
+        });
+
+        document.getElementById('nickname').addEventListener('input', function() {
+            document.getElementById('nicknameGroup').classList.remove('error');
+        });
+
+        document.getElementById('age').addEventListener('input', function() {
+            document.getElementById('ageGroup').classList.remove('error');
+        });
+
+        // 性别选择验证
+        document.querySelectorAll('input[name="gender"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.getElementById('genderGroup').classList.remove('error');
+            });
+        });
+
+        // 协议复选框验证
+        document.getElementById('agreement').addEventListener('change', function() {
+            const agreementGroup = document.getElementById('agreementGroup');
+            const agreementError = document.getElementById('agreementError');
+            if (this.checked) {
+                agreementGroup.classList.remove('error');
+                agreementError.style.display = 'none';
+            }
+        });
+
+        // 表单提交
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            if (!validateForm()) {
+                return;
+            }
+
+            // 显示加载状态
+            const registerButton = document.getElementById('registerButton');
+            const buttonText = document.getElementById('buttonText');
+            registerButton.disabled = true;
+            buttonText.innerHTML = '<span class="button-loading"></span>注册中...';
+
+            // 模拟注册请求
+            setTimeout(() => {
+                // 显示成功消息
+                const successMessage = document.getElementById('successMessage');
+                successMessage.style.display = 'block';
+
+                // 恢复按钮状态
+                registerButton.disabled = false;
+                buttonText.textContent = '立即注册';
+
+                // 3秒后隐藏成功消息
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 3000);
+
+                // 这里可以添加实际的注册逻辑
+                console.log('注册信息:', {
+                    username: document.getElementById('username').value,
+                    nickname: document.getElementById('nickname').value,
+                    password: document.getElementById('password').value,
+                    gender: document.querySelector('input[name="gender"]:checked').value,
+                    age: document.getElementById('age').value,
+                    agreement: document.getElementById('agreement').checked
+                });
+            }, 1500);
+        });
+
+        // 响应式：小屏幕下默认隐藏设计说明
+        if (window.innerWidth <= 480) {
+            document.getElementById('designNotes').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
